@@ -28,3 +28,7 @@ app.get('/bingg',(req,res) => {
     res.send('database created....')
     })
 });
+
+app.listen('3000',() => {
+    console.log('srver is import on 3000');
+})
