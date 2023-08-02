@@ -1,9 +1,9 @@
-const Joi = require('joi');
+
 const express = require('express');
 const bodyParser = require("body-parser");
 const {getData} = require('./crudOperation')
 //const mysql = require('mysql');
-//const { schema } = require('joi/lib/types/object');
+//const {Validation} = require('./InputValidation')
 
 const app = express();
 
@@ -11,46 +11,30 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extends:true}));
 
+const {schemaValidate} =require('./InputService') 
+
 const connectDB = require('./MYSQL');
 connectDB.db
 connectDB.connection
 
-const Validate = async (Data, NeddedObj) => {
-  let Data_Obj = Object.keys(Data)
-  let InputValue
-
-  NeddedObj.forEach(element => {
-    if (!Data_Obj.includes(element))
-      InputValue = element
-  })
-
-  if (!InputValue) {
-    return { res: true };
-  } else {
-    return { res: false, message: `${InputValue} is required.` };
-  }
-}
-
 
 app.get('/api/v1/users/list', (req, res) => {
   const getuser = getData('users');
-
   res.json({
     "data":"result"
-  })
-    
+  })    
 })
 
 
-app.post('/api/v1/users/create', async (req, res) => {
+app.post('/api/v1/users/create', (req, res) => {
   // validate request body
   const body = req?.body;
-  const ValidateForm =  await Validate(body, ["user_name", "first_name", "last_name"])
+  const ValidateForm =  schemaValidate.validate(body)
   
   if (!ValidateForm?.res) {
     res.json({
       "data": null,
-      "message": ValidateForm?.message
+      "message": "required"
     });
 
   } else {
@@ -84,21 +68,21 @@ app.post('/api/v1/users/create', async (req, res) => {
 
   } 
 })
-app.put('/api/v1/users/update', async (req, res) => {
+app.put('/api/v1/users/update', (req, res) => {
   // validate request body
   const body = req?.body;
-  const ValidateForm = await Validate(body, ["user_name", "first_name", "last_name"])
+  const ValidateForm = schemaValidate.validate(body)
 
   if (!ValidateForm?.res) {
     res.json({
       "data": null,
-      "message": ValidateForm?.message
+      "message": "required"
     });
 
 
   } else {
     let FindUser = `SELECT * FROM users Where user_id = '${body?.user_id}'`;
-    db.query(FindUser, (err, result) => {
+    connectDB.db.query(FindUser, (err, result) => {
       if (err) throw err
       if (!result?.length >= 1) {
         res.json({
@@ -107,11 +91,11 @@ app.put('/api/v1/users/update', async (req, res) => {
         });
       } else {
         let InsertUser = `UPDATE users SET first_name = '${body?.first_name}',last_name = '${body?.last_name}' WHERE user_id = '${body?.user_id}'`;
-        db.query(InsertUser, (err, result) => {
+        connectDB.db.query(InsertUser, (err, result) => {
           if (err) throw err
           console.log("ss2" + JSON.stringify(result))
           let getUser = `SELECT * FROM users Where user_id = '${body?.user_id}'`;
-          db.query(getUser, (err, result) => {
+          connectDB.db.query(getUser, (err, result) => {
             res.json({
               "data": result,
               "message": "User Updated Succsessfully."
@@ -122,9 +106,6 @@ app.put('/api/v1/users/update', async (req, res) => {
     });
   }
 })
-
-
- 
 
 const port = process.env.PORT || 5000;
 
