@@ -1,0 +1,84 @@
+---
+openapi: 3.0.0
+info:
+ title: Ecommerce APIs
+ description: api docs
+ version: 1.0.0
+ contact:
+    email: ariansajadian79@gmail.com
+    name: Arian
+servers:
+    - url: "http://localhost:5000/api/v1"
+tags:
+     - name: users
+       description: operations about users
+     - name: roles
+       description: access to roles
+     - name: products
+       description: access to products in aplication 
+     - name: categories
+       description: products categories               
+paths:
+  /users/list:
+    get:
+      tags:
+        - users      
+      description: Update an existing users by Id
+      responses:
+        '200':
+          description: Successful operation 
+  /users/create:
+    post: 
+      tags:
+        - users
+      description: Add a new users to the store
+      requestBody:
+        description: Create a new users in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/users'
+        required: true
+      responses:
+        '200':
+          description: Success      
+  /roles/list:
+    get:
+      tags:
+       - roles
+      description: data will get roles table
+      responses:
+        '200':
+         description:  Success
+  /products/list:
+    get:
+      tags:
+      - products
+      description: data will get products table
+      responses:
+        '200':
+         description: Success
+  /categories/list:
+    get:
+      tags:
+      - categories
+      description:
+      responses:
+        '200':
+         description: Success
+  /orders/list:
+    get:
+      tags:
+      - orders
+      description:
+      responses:
+        '200':
+           description: Success       
+    
+

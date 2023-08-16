@@ -12,8 +12,15 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "joi": "^13.1.0",
     "joi-sql": "^1.4.1",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "swagger-jsdoc": "^4.3.2",
+    "swagger-ui-express": "^4.6.3",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/joi": "^17.2.3"
   }
 }
