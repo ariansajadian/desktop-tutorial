@@ -56,11 +56,17 @@ paths:
       responses:
         '200':
          description:  Success
-  /products/list:
+  /products/:
     get:
       tags:
       - products
       description: data will get products table
+      operationId: ""
+      parameters:          
+        name: status 
+        in: query 
+        description: Status values that need to be considered for filter 
+        required: false
       responses:
         '200':
          description: Success

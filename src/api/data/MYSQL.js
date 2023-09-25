@@ -2,13 +2,13 @@
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
+    host: process.env.MYSQL_IP,
+    user: process.env.MYSQL_LOGIN,
     password: '',
-    database: 'e-commerce'
+    database: process.env.DB_NAME
   
   })
-  
+
   const connection = db.connect((err) => {
     if (err) throw err
     console.log('MYSQL connected')
